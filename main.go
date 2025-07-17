@@ -10,6 +10,7 @@ import (
 const inputPath = "INPUT_PATH"
 const inputIsObsidianProject = "INPUT_ISOBSIDIANPROJECT"
 const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/archive/refs/tags/latest.tar.gz"
+const latestPapiroReleaseFileName = "latest.tar.gz"
 
 func main() {
 	getLatestPapiro()
@@ -20,13 +21,13 @@ func main() {
 func getLatestPapiro() {
 
 	// Download the "latest" tag from github
-	error := io.Wget(latestPapiroReleaseUrl)
+	error := io.Wget(latestPapiroReleaseUrl, latestPapiroReleaseFileName)
 	if nil != error {
 		panic(fmt.Sprintf("ERROR: Failed to download latest papiro version: %s", error.Error()))
 	}
 
 	// uncompress the website
-	error = io.Untar("latest.tar.gz", ".")
+	error = io.Untar(latestPapiroReleaseFileName, ".")
 	if nil != error {
 		panic(fmt.Sprintf("ERROR: Failed to uncompress the latest papiro version: %s", error.Error()))
 	}
