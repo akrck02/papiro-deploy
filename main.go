@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -13,38 +14,55 @@ const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/archive/refs/t
 const latestPapiroReleaseFileName = "latest.tar.gz"
 
 func main() {
-	getLatestPapiro()
-	indexFiles()
-	movePapiroToRoot()
+	error := getLatestPapiro()
+	if nil != error {
+		fmt.Printf("ERROR: %s", error.Error())
+		return
+	}
+
+	error = indexFiles()
+	if nil != error {
+		fmt.Printf("ERROR: %s", error.Error())
+		return
+	}
+
+	error = movePapiroToRoot()
+	if nil != error {
+		fmt.Printf("ERROR: %s", error.Error())
+		return
+	}
 }
 
-func getLatestPapiro() {
+func getLatestPapiro() error {
 
 	// Download the "latest" tag from github
 	error := io.Wget(latestPapiroReleaseUrl, latestPapiroReleaseFileName)
 	if nil != error {
-		panic(fmt.Sprintf("ERROR: Failed to download latest papiro version: %s", error.Error()))
+		return errors.New(fmt.Sprintf("ERROR: Failed to download latest papiro version: %s", error.Error()))
 	}
 
 	// uncompress the website
 	error = io.Untar(latestPapiroReleaseFileName, ".")
 	if nil != error {
-		panic(fmt.Sprintf("ERROR: Failed to uncompress the latest papiro version: %s", error.Error()))
+		return errors.New(fmt.Sprintf("ERROR: Failed to uncompress the latest papiro version: %s", error.Error()))
 	}
 
+	return nil
 }
 
-func indexFiles() {
+func indexFiles() error {
 	path := os.Getenv(inputPath)
 	isObsidianProject := os.Getenv(inputIsObsidianProject) == "true"
 	println(fmt.Sprint("path is ", path))
 	println(fmt.Sprint("obsidian:", isObsidianProject))
 }
 
-func movePapiroToRoot() {
+func movePapiroToRoot() error {
 	// Move the files to root
 	error := io.Move("papiro-latest/*", ".")
 	if nil != error {
-		panic(fmt.Sprintf("ERROR: Failed to move files to root: %s.", error.Error()))
+		return errors.New(fmt.Sprintf("ERROR: Failed to move files to root: %s.", error.Error()))
 	}
+
+	return nil
 }
