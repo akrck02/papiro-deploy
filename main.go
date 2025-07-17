@@ -9,7 +9,7 @@ import (
 
 const inputPath = "INPUT_PATH"
 const inputIsObsidianProject = "INPUT_ISOBSIDIANPROJECT"
-const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/archive/refs/tags/latest.tar.gz"
+const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/releases/download/latest/papiro-latest.tar.gz"
 const latestPapiroReleaseFileName = "latest.tar.gz"
 
 type ActionInput struct {
