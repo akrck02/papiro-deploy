@@ -1,5 +1,5 @@
 name: "Papiro"
-description: "Papiro document github action"
+description: "Publish markdown documents as a website."
 author: "akrck02"
 inputs:
   path:

@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	myInput := os.Getenv("INPUT_MYINPUT")
-	output := fmt.Sprintf("Hello %s", myInput)
-	fmt.Println(fmt.Sprintf(`::set-output name=myOutput::%s`, output))
+	path := os.Getenv("INPUT_PATH")
+	isObsidian := os.Getenv("INPUT_ISOBSIDIANPROJECT") == "true"
+	println(fmt.Sprint("path is ", path))
+	println(fmt.Sprint("obsidian:", isObsidian))
 }
