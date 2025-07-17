@@ -12,14 +12,27 @@ const inputIsObsidianProject = "INPUT_ISOBSIDIANPROJECT"
 const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/archive/refs/tags/latest.tar.gz"
 const latestPapiroReleaseFileName = "latest.tar.gz"
 
+type ActionInput struct {
+	path              string
+	isObsidianProject bool
+}
+
 func main() {
-	error := getLatestPapiro()
+
+	input := loadActionInput()
+	error := moveFilesToTempDir(&input)
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
 		return
 	}
 
-	error = indexFiles()
+	error = getLatestPapiro()
+	if nil != error {
+		fmt.Printf("ERROR: %s", error.Error())
+		return
+	}
+
+	error = indexFiles(&input)
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
 		return
@@ -29,6 +42,13 @@ func main() {
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
 		return
+	}
+}
+
+func loadActionInput() ActionInput {
+	return ActionInput{
+		path:              os.Getenv(inputPath),
+		isObsidianProject: os.Getenv(inputIsObsidianProject) == "true",
 	}
 }
 
@@ -49,11 +69,14 @@ func getLatestPapiro() error {
 	return nil
 }
 
-func indexFiles() error {
-	path := os.Getenv(inputPath)
-	isObsidianProject := os.Getenv(inputIsObsidianProject) == "true"
-	println(fmt.Sprint("path is ", path))
-	println(fmt.Sprint("obsidian:", isObsidianProject))
+func indexFiles(input *ActionInput) error {
+	println(fmt.Sprint("path is ", input.path))
+	println(fmt.Sprint("obsidian:", input.isObsidianProject))
+	return nil
+}
+
+func moveFilesToTempDir(input *ActionInput) error {
+	io.Move(".", "temp")
 	return nil
 }
 
