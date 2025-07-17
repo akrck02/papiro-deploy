@@ -5,27 +5,9 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
-	"strings"
 	"syscall"
 )
-
-func executeCommand(command string, args ...string) error {
-	cmd := exec.Command(command, args...)
-
-	println(strings.Join(cmd.Args, " "))
-	cmd.Dir = "."
-	cmd.Stderr = os.Stderr
-
-	error := cmd.Run()
-
-	if error != nil {
-		return error
-	}
-
-	return nil
-}
 
 func Wget(url string, path string) error {
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -38,13 +37,13 @@ func getLatestPapiro() error {
 	// Download the "latest" tag from github
 	error := io.Wget(latestPapiroReleaseUrl, latestPapiroReleaseFileName)
 	if nil != error {
-		return errors.New(fmt.Sprintf("ERROR: Failed to download latest papiro version: %s", error.Error()))
+		return fmt.Errorf("Failed to download latest papiro version: %s", error.Error())
 	}
 
 	// uncompress the website
 	error = io.Untar(latestPapiroReleaseFileName, ".")
 	if nil != error {
-		return errors.New(fmt.Sprintf("ERROR: Failed to uncompress the latest papiro version: %s", error.Error()))
+		return fmt.Errorf("Failed to uncompress the latest papiro version: %s", error.Error())
 	}
 
 	return nil
@@ -60,9 +59,9 @@ func indexFiles() error {
 
 func movePapiroToRoot() error {
 	// Move the files to root
-	error := io.Move("papiro-latest/*", ".")
+	error := io.Move("papiro-latest", ".")
 	if nil != error {
-		return errors.New(fmt.Sprintf("ERROR: Failed to move files to root: %s.", error.Error()))
+		return fmt.Errorf("Failed to move files to root: %s.", error.Error())
 	}
 
 	return nil
