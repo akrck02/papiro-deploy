@@ -55,6 +55,7 @@ func indexFiles() error {
 	isObsidianProject := os.Getenv(inputIsObsidianProject) == "true"
 	println(fmt.Sprint("path is ", path))
 	println(fmt.Sprint("obsidian:", isObsidianProject))
+	return nil
 }
 
 func movePapiroToRoot() error {
