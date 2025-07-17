@@ -20,7 +20,7 @@ type ActionInput struct {
 func main() {
 
 	input := loadActionInput()
-	error := moveFilesToTempDir(&input)
+	error := moveFilesToTempDir()
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
 		return
@@ -72,12 +72,12 @@ func getLatestPapiro() error {
 func indexFiles(input *ActionInput) error {
 	println(fmt.Sprint("path is ", input.path))
 	println(fmt.Sprint("obsidian:", input.isObsidianProject))
+
 	return nil
 }
 
-func moveFilesToTempDir(input *ActionInput) error {
-	io.Move(".", "temp")
-	return nil
+func moveFilesToTempDir() error {
+	return io.Move(".", "temp")
 }
 
 func movePapiroToRoot() error {

@@ -1,4 +1,4 @@
-name: "Papiro"
+name: "Papiro deploy"
 description: "Publish markdown documents as a website."
 author: "akrck02"
 inputs:
