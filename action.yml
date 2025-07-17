@@ -1,0 +1,16 @@
+name: "Papiro"
+description: "Papiro document github action"
+author: "akrck02"
+inputs:
+  path:
+    description: "documents directory"
+    default: "docs"
+  isObsidianProject:
+    description: "docs use obsidian formats"
+    default: "false"
+outputs:
+  myOutput:
+    description: "Output from the action"
+runs:
+  using: "docker"
+  image: "Dockerfile"
