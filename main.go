@@ -107,7 +107,7 @@ func moveFilesToTempDir() error {
 	}
 
 	for _, file := range children {
-		if file.Name() != "temp" {
+		if file.Name() != "temp" && file.Name() != ".git" {
 			error = os.RemoveAll(file.Name())
 			if nil != error {
 				return error
