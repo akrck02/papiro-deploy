@@ -30,5 +30,15 @@ inputs:
     description: "show the start page"
     default: "true"
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: "composite"
+  steps:
+    - name: Prepare the papiro deploy
+      id: papiro-deploy
+      run: ./papiro-deploy
+      shell: bash
+
+    - name: Deploy to github actions 🚀
+      uses: JamesIves/github-pages-deploy-action@v4.3.0
+      with:
+        branch: gh-pages # The branch the action should deploy to.
+        folder: . # The folder the action should deploy.
