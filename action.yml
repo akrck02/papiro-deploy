@@ -34,13 +34,9 @@ runs:
   steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-go@v5
+      run: go run ./src/main.go
       with:
         go-version: "1.24.3" # The Go version to download (if necessary) and use.
-
-    - name: Prepare the papiro deploy
-      id: papiro-deploy
-      run: go run ./src/main.go
-      shell: bash
 
     - name: Deploy to github actions 🚀
       uses: JamesIves/github-pages-deploy-action@v4.3.0
