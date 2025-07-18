@@ -12,6 +12,9 @@ RUN CGO_ENABLED=0 go build -ldflags="-w -s" -v -o app .
 # https://github.com/GoogleContainerTools/distroless
 FROM gcr.io/distroless/static
 
+RUN adduser --system --group runner-user # Crear un usuario
+
 COPY --from=builder /app/app /app
 
+USER runner-user
 ENTRYPOINT ["/app"]
