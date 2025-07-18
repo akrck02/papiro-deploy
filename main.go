@@ -7,14 +7,31 @@ import (
 	"github.com/akrck02/papiro-deploy/io"
 )
 
-const inputPath = "INPUT_PATH"
-const inputIsObsidianProject = "INPUT_ISOBSIDIANPROJECT"
+type ActionInputName string
+
+const (
+	titleInput             = "INPUT_TITLE"
+	descriptionInput       = "INPUT_DESCRIPTION"
+	logoInput              = "INPUT_LOGO"
+	pathInput              = "INPUT_PATH"
+	isObsidianProjectInput = "INPUT_ISOBSIDIANPROJECT"
+	showFooterInput        = "INPUT_SHOWFOOTER"
+	showBreadcrumbInput    = "INPUT_SHOWBREADCRUMB"
+	showStartPageInpu      = "INPUT_SHOWSTARTPAGE"
+)
+
 const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/releases/download/latest/papiro-latest.tar.gz"
 const latestPapiroReleaseFileName = "latest.tar.gz"
 
 type ActionInput struct {
+	title             string
+	description       string
+	logo              string
 	path              string
 	isObsidianProject bool
+	showFooter        bool
+	showBreadcrumb    bool
+	showStartPage     bool
 }
 
 func main() {
@@ -47,8 +64,14 @@ func main() {
 
 func loadActionInput() ActionInput {
 	return ActionInput{
-		path:              os.Getenv(inputPath),
-		isObsidianProject: os.Getenv(inputIsObsidianProject) == "true",
+		title:             os.Getenv(titleInput),
+		description:       os.Getenv(descriptionInput),
+		logo:              os.Getenv(logoInput),
+		path:              os.Getenv(pathInput),
+		isObsidianProject: os.Getenv(isObsidianProjectInput) == "true",
+		showFooter:        os.Getenv(showFooterInput) == "true",
+		showBreadcrumb:    os.Getenv(showBreadcrumbInput) == "true",
+		showStartPage:     os.Getenv(showBreadcrumbInput) == "true",
 	}
 }
 
@@ -81,7 +104,6 @@ func moveFilesToTempDir() error {
 }
 
 func movePapiroToRoot() error {
-	// Move the files to root
 	error := io.Move("papiro-latest", ".")
 	if nil != error {
 		return fmt.Errorf("Failed to move files to root: %s.", error.Error())

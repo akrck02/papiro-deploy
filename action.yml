@@ -5,15 +5,30 @@ branding:
   color: white
   icon: file-text
 inputs:
+  title:
+    description: "title"
+    default: ""
+  description:
+    description: "description"
+    default: ""
+  logo:
+    description: "logo"
+    default: ""
   path:
     description: "documents directory"
     default: "docs"
   isObsidianProject:
     description: "docs use obsidian formats"
     default: "false"
-outputs:
-  myOutput:
-    description: "Output from the action"
+  showFooter:
+    description: "show the credits footer"
+    default: "true"
+  showBreadcrumb:
+    description: "show the breadcrumb"
+    default: "true"
+  showStartPage:
+    description: "show the start page"
+    default: "true"
 runs:
   using: "docker"
   image: "Dockerfile"
