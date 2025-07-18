@@ -14,7 +14,7 @@ func Move(path string, destination string) error {
 		return error
 	}
 
-	return os.RemoveAll(path)
+	return os.RemoveAll(fmt.Sprintf("%s/*", path))
 }
 
 func Copy(srcFile, dstFile string) error {
