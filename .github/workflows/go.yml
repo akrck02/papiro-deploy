@@ -15,4 +15,5 @@ jobs:
 
       - name: Build
         run: |
-          go install
+          cd src
+          go build
