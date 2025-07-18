@@ -37,6 +37,8 @@ type ActionInput struct {
 func main() {
 
 	input := loadActionInput()
+	showTitle(&input)
+
 	error := moveFilesToTempDir()
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
@@ -49,17 +51,18 @@ func main() {
 		return
 	}
 
+	error = movePapiroToRoot()
+	if nil != error {
+		fmt.Printf("ERROR: %s", error.Error())
+		return
+	}
+
 	error = indexFiles(&input)
 	if nil != error {
 		fmt.Printf("ERROR: %s", error.Error())
 		return
 	}
 
-	error = movePapiroToRoot()
-	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
-	}
 }
 
 func loadActionInput() ActionInput {
@@ -73,6 +76,27 @@ func loadActionInput() ActionInput {
 		showBreadcrumb:    os.Getenv(showBreadcrumbInput) == "true",
 		showStartPage:     os.Getenv(showBreadcrumbInput) == "true",
 	}
+}
+
+func showTitle(input *ActionInput) {
+
+	fmt.Sprintln("--------------------------------------")
+	fmt.Sprintln("         🚀 Papiro deploy 🚀          ")
+	fmt.Sprintln("--------------------------------------")
+	fmt.Sprintln()
+	fmt.Sprintln("title:", input.title)
+	fmt.Sprintln("description:", input.description)
+	fmt.Sprintln("logo:", input.logo)
+	fmt.Sprintln("path is", input.path)
+	fmt.Sprintln("obsidian:", input.isObsidianProject)
+	fmt.Sprintln("show footer:", input.showFooter)
+	fmt.Sprintln("show breadcrumb:", input.showBreadcrumb)
+	fmt.Sprintln("show start page:", input.showStartPage)
+	fmt.Sprintln()
+}
+
+func moveFilesToTempDir() error {
+	return io.Move(".", "temp")
 }
 
 func getLatestPapiro() error {
@@ -92,17 +116,6 @@ func getLatestPapiro() error {
 	return nil
 }
 
-func indexFiles(input *ActionInput) error {
-	println(fmt.Sprint("path is ", input.path))
-	println(fmt.Sprint("obsidian:", input.isObsidianProject))
-
-	return nil
-}
-
-func moveFilesToTempDir() error {
-	return io.Move(".", "temp")
-}
-
 func movePapiroToRoot() error {
 	error := io.Move("papiro-latest", ".")
 	if nil != error {
@@ -110,4 +123,8 @@ func movePapiroToRoot() error {
 	}
 
 	return nil
+}
+
+func indexFiles(input *ActionInput) error {
+	return io.Index(fmt.Sprintf("./temp/%s", input.path), "./resources/wiki", input.isObsidianProject)
 }
