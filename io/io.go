@@ -1,20 +1,46 @@
 package io
 
 import (
+	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"syscall"
 )
 
-func Move(path string, destination string) error {
-	error := CopyDirectory(path, destination)
-	if nil != error {
-		return error
+func ReadDirectory(srcFile string) ([]fs.DirEntry, error) {
+
+	// If input file does not exists, raise an error
+	fileStats, error := os.Stat(srcFile)
+	if os.IsNotExist(error) {
+		return nil, errors.New("path does not exist.")
 	}
 
-	return os.RemoveAll(fmt.Sprintf("%s/*", path))
+	if nil != error {
+		return nil, errors.New(fmt.Sprint("Cannot access stats for path", srcFile, ":", error.Error()))
+	}
+
+	// if it is a file
+	if !fileStats.IsDir() {
+		return nil, errors.New("The given path is not a directory.")
+	}
+
+	// open the directory
+	directory, error := os.Open(srcFile)
+	if nil != error {
+		return nil, errors.New(fmt.Sprint("Cannot access the directory:", error.Error()))
+	}
+	defer directory.Close()
+
+	// get children
+	files, error := os.ReadDir(directory.Name())
+	if nil != error {
+		return nil, error
+	}
+
+	return files, nil
 }
 
 func Copy(srcFile, dstFile string) error {

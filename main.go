@@ -96,7 +96,26 @@ func showTitle(input *ActionInput) {
 }
 
 func moveFilesToTempDir() error {
-	return io.Move(".", "temp")
+	error := io.CopyDirectory(".", "temp")
+	if nil != error {
+		return error
+	}
+
+	children, error := io.ReadDirectory("./")
+	if nil != error {
+		return error
+	}
+
+	for _, file := range children {
+		if file.Name() != "temp" {
+			error = os.RemoveAll(file.Name())
+			if nil != error {
+				return error
+			}
+		}
+	}
+
+	return nil
 }
 
 func getLatestPapiro() error {
@@ -117,7 +136,7 @@ func getLatestPapiro() error {
 }
 
 func movePapiroToRoot() error {
-	error := io.Move("papiro-latest", ".")
+	error := io.Move("papiro-latest", "./")
 	if nil != error {
 		return fmt.Errorf("Failed to move files to root: %s.", error.Error())
 	}
