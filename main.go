@@ -136,9 +136,14 @@ func getLatestPapiro() error {
 }
 
 func movePapiroToRoot() error {
-	error := io.Move("papiro-latest", "./")
+	error := io.CopyDirectory("papiro-latest", "./")
 	if nil != error {
 		return fmt.Errorf("Failed to move files to root: %s.", error.Error())
+	}
+
+	error = os.RemoveAll("papiro-latest")
+	if nil != error {
+		return error
 	}
 
 	return nil
