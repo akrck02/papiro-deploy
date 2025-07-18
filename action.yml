@@ -39,7 +39,7 @@ runs:
 
     - name: Prepare the papiro deploy
       id: papiro-deploy
-      run: go run src/main.go
+      run: go run ./src/main.go
       shell: bash
 
     - name: Deploy to github actions 🚀
