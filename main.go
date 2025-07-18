@@ -108,7 +108,7 @@ func getLatestPapiro() error {
 	}
 
 	// uncompress the website
-	error = io.Untar(latestPapiroReleaseFileName, ".")
+	error = io.Untar(latestPapiroReleaseFileName, "./papiro-latest")
 	if nil != error {
 		return fmt.Errorf("Failed to uncompress the latest papiro version: %s", error.Error())
 	}
