@@ -1,4 +1,4 @@
-const { spawnSync } = require("child_process");
+import { spawn } from "node:child_process";
 
 function chooseBinary() {
 	return `main-linux-amd64`;
@@ -6,4 +6,15 @@ function chooseBinary() {
 
 const binary = chooseBinary();
 const mainScript = `${__dirname}/${binary}`;
-const spawnSyncReturns = spawnSync(mainScript, { stdio: "inherit" });
+const action = spawn(mainScript);
+action.stdout.on("data", (data) => {
+	console.log(`stdout: ${data}`);
+});
+
+action.on("close", (code) => {
+	console.log(`child process close all stdio with code ${code}`);
+});
+
+action.on("exit", (code) => {
+	console.log(`child process exited with code ${code}`);
+});
