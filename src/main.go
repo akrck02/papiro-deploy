@@ -152,7 +152,7 @@ func movePapiroToRoot() error {
 func indexFiles(input *ActionInput) error {
 	path := ""
 
-	if "." != path {
+	if "." != input.path {
 		path = input.path
 	}
 
