@@ -27,5 +27,9 @@ jobs:
           showFooter: true            # if the footer of the page must be shown
           showBreadcrumb: true        # if the breadcrumb of the page must be shown
           showStartPage: true         # if the start page must be shown
-
+      - name: Deploy to github actions 🚀
+        uses: JamesIves/github-pages-deploy-action@v4.3.0 # please checkout and give a star to this amazing action.
+        with:
+          branch: gh-pages            # The branch the action should deploy to.
+          folder: .                   # The folder the action should deploy.
 ```
