@@ -1,0 +1,20 @@
+{
+	"name": "papiro-deploy",
+	"version": "1.0.0",
+	"description": "Deploy tools for papiro.",
+	"main": "invoque-binary.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/akrck02/papiro-deploy.git"
+	},
+	"keywords": [],
+	"author": "akrck02",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/akrck02/papiro-deploy/issues"
+	},
+	"homepage": "https://github.com/akrck02/papiro-deploy#readme"
+}
