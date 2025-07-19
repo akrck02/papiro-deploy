@@ -7,4 +7,4 @@ function chooseBinary() {
 const binary = chooseBinary();
 const mainScript = `${__dirname}/${binary}`;
 const action = spawnSync(mainScript, []);
-console.log(result.stdout.toString());
+console.log(action.stdout.toString());
