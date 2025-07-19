@@ -156,5 +156,5 @@ func indexFiles(input *ActionInput) error {
 		path = input.path
 	}
 
-	return io.Index(fmt.Sprintf("./temp/%s", input.path), "./resources/wiki", input.isObsidianProject)
+	return io.Index(fmt.Sprintf("./temp/%s", path), "./resources/wiki", input.isObsidianProject)
 }
