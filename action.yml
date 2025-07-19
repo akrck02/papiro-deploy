@@ -38,7 +38,7 @@ runs:
 
     - name: Perform action
       shell: bash
-      run: node run invoque-binary,js
+      run: node run invoque-binary.js
 
     - name: Deploy to github actions 🚀
       uses: JamesIves/github-pages-deploy-action@v4.3.0
