@@ -150,5 +150,11 @@ func movePapiroToRoot() error {
 }
 
 func indexFiles(input *ActionInput) error {
+	path := ""
+
+	if "." != path {
+		path = input.path
+	}
+
 	return io.Index(fmt.Sprintf("./temp/%s", input.path), "./resources/wiki", input.isObsidianProject)
 }
