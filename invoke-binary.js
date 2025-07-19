@@ -6,5 +6,4 @@ function chooseBinary() {
 
 const binary = chooseBinary();
 const mainScript = `${__dirname}/${binary}`;
-const action = spawnSync(mainScript, []);
-console.log(action.stdout.toString());
+const action = spawnSync(mainScript, [], { stdio: "inherit" });
