@@ -5,7 +5,7 @@ function chooseBinary() {
 }
 
 const binary = chooseBinary();
-const mainScript = `${__dirname}/${binary}`;
+const mainScript = `./${binary}`;
 const action = spawn(mainScript);
 action.stdout.on("data", (data) => {
 	console.log(`stdout: ${data}`);
