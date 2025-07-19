@@ -45,6 +45,7 @@ type ActionInput struct {
 
 type PapiroConfiguration struct {
 	AppName          string            `json:"app_name"`
+	AppDescription   string            `json:"app_description"`
 	AppVersion       string            `json:"app_version"`
 	CoreName         string            `json:"core_name"`
 	CoreVersion      string            `json:"core_version"`
@@ -229,6 +230,7 @@ func changeConfigurationFile(input *ActionInput) error {
 		configuration.AppName = repository
 	}
 
+	configuration.AppDescription = input.description
 	configuration.ShowFooter = input.showFooter
 	configuration.ShowBreadcrumb = input.showBreadcrumb
 	configuration.ShowStartPage = input.showStartPage
