@@ -71,9 +71,26 @@ func CopyDirectory(scrDir, dest string) error {
 	if err != nil {
 		return err
 	}
+
+	// the destination may not exist yet (it used to be created by chance
+	// when the first entry was a directory such as .git)
+	if err := CreateIfNotExists(dest, 0755); err != nil {
+		return err
+	}
+
+	destination, err := filepath.Abs(dest)
+	if err != nil {
+		return err
+	}
+
 	for _, entry := range entries {
 		sourcePath := filepath.Join(scrDir, entry.Name())
 		destPath := filepath.Join(dest, entry.Name())
+
+		// never copy the destination into itself
+		if absolute, _ := filepath.Abs(sourcePath); absolute == destination {
+			continue
+		}
 
 		fileInfo, err := os.Stat(sourcePath)
 		if err != nil {
