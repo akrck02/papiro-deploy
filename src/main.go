@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/akrck02/papiro-deploy/io"
@@ -31,6 +32,7 @@ const (
 const latestPapiroReleaseUrl = "https://github.com/akrck02/papiro/releases/download/latest/papiro-latest.tar.gz"
 const latestPapiroReleaseFileName = "latest.tar.gz"
 const configurationJsonFile = "gtdf.config.json"
+const logoFile = "resources/icons/logo.svg"
 
 type ActionInput struct {
 	title             string
@@ -65,32 +67,32 @@ func main() {
 
 	error := moveFilesToTempDir()
 	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
+		fail(error)
 	}
 
 	error = getLatestPapiro()
 	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
+		fail(error)
 	}
 
 	error = movePapiroToRoot()
 	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
+		fail(error)
+	}
+
+	error = copyLogo(&input)
+	if nil != error {
+		fail(error)
 	}
 
 	error = indexFiles(&input)
 	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
+		fail(error)
 	}
 
 	error = changeConfigurationFile(&input)
 	if nil != error {
-		fmt.Printf("ERROR: %s", error.Error())
-		return
+		fail(error)
 	}
 
 }
@@ -104,25 +106,25 @@ func loadActionInput() ActionInput {
 		isObsidianProject: os.Getenv(isObsidianProjectInput) == "true",
 		showFooter:        os.Getenv(showFooterInput) == "true",
 		showBreadcrumb:    os.Getenv(showBreadcrumbInput) == "true",
-		showStartPage:     os.Getenv(showBreadcrumbInput) == "true",
+		showStartPage:     os.Getenv(showStartPageInpu) == "true",
 	}
 }
 
 func showTitle(input *ActionInput) {
 
-	fmt.Sprintln("--------------------------------------")
-	fmt.Sprintln("         🚀 Papiro deploy 🚀          ")
-	fmt.Sprintln("--------------------------------------")
-	fmt.Sprintln()
-	fmt.Sprintln("title:", input.title)
-	fmt.Sprintln("description:", input.description)
-	fmt.Sprintln("logo:", input.logo)
-	fmt.Sprintln("path is", input.path)
-	fmt.Sprintln("obsidian:", input.isObsidianProject)
-	fmt.Sprintln("show footer:", input.showFooter)
-	fmt.Sprintln("show breadcrumb:", input.showBreadcrumb)
-	fmt.Sprintln("show start page:", input.showStartPage)
-	fmt.Sprintln()
+	fmt.Println("--------------------------------------")
+	fmt.Println("         🚀 Papiro deploy 🚀          ")
+	fmt.Println("--------------------------------------")
+	fmt.Println()
+	fmt.Println("title:", input.title)
+	fmt.Println("description:", input.description)
+	fmt.Println("logo:", input.logo)
+	fmt.Println("path is", input.path)
+	fmt.Println("obsidian:", input.isObsidianProject)
+	fmt.Println("show footer:", input.showFooter)
+	fmt.Println("show breadcrumb:", input.showBreadcrumb)
+	fmt.Println("show start page:", input.showStartPage)
+	fmt.Println()
 }
 
 func moveFilesToTempDir() error {
@@ -185,6 +187,25 @@ func movePapiroToRoot() error {
 	return nil
 }
 
+// copyLogo replaces the papiro logo with the project one, if given.
+// The repository files are still in ./temp at this point.
+func copyLogo(input *ActionInput) error {
+	if "" == strings.TrimSpace(input.logo) {
+		return nil
+	}
+
+	if ".svg" != strings.ToLower(filepath.Ext(input.logo)) {
+		return fmt.Errorf("the logo must be an svg file: %s", input.logo)
+	}
+
+	content, error := os.ReadFile(filepath.Join("temp", input.logo))
+	if nil != error {
+		return fmt.Errorf("Failed to read the logo: %s", error.Error())
+	}
+
+	return os.WriteFile(logoFile, content, 0644)
+}
+
 func indexFiles(input *ActionInput) error {
 	path := ""
 
@@ -192,7 +213,13 @@ func indexFiles(input *ActionInput) error {
 		path = input.path
 	}
 
-	error := io.Index(fmt.Sprintf("./temp/%s", path), "./resources/wiki", input.isObsidianProject)
+	// the release brings papiro's own documents, they must not be published
+	error := os.RemoveAll("./resources/wiki")
+	if nil != error {
+		return error
+	}
+
+	error = io.Index(fmt.Sprintf("./temp/%s", path), "./resources/wiki", input.isObsidianProject)
 	if nil != error {
 		return error
 	}
@@ -247,4 +274,10 @@ func changeConfigurationFile(input *ActionInput) error {
 	}
 
 	return nil
+}
+
+// fail stops the action with an error, so the workflow run is marked as failed
+func fail(error error) {
+	fmt.Printf("ERROR: %s\n", error.Error())
+	os.Exit(1)
 }
