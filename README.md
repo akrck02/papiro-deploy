@@ -1,3 +1,5 @@
+<p align="center"><img alt="" src="docs/images/logo.svg" width="120"></p>
+
 # Papiro deploy github action
 Deploy your markdown documents as a wiki website on github pages.
 
