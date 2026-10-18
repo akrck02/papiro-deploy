@@ -16,6 +16,7 @@ const (
 	titleInput             = "INPUT_TITLE"
 	descriptionInput       = "INPUT_DESCRIPTION"
 	logoInput              = "INPUT_LOGO"
+	accentInput            = "INPUT_ACCENT"
 	pathInput              = "INPUT_PATH"
 	isObsidianProjectInput = "INPUT_ISOBSIDIANPROJECT"
 	showFooterInput        = "INPUT_SHOWFOOTER"
@@ -38,6 +39,7 @@ type ActionInput struct {
 	title             string
 	description       string
 	logo              string
+	accent            string
 	path              string
 	isObsidianProject bool
 	showFooter        bool
@@ -57,6 +59,7 @@ type PapiroConfiguration struct {
 	ShowStartPage    bool              `json:"show_start_page"`
 	ShowFooter       bool              `json:"show_footer"`
 	ShowBreadcrumb   bool              `json:"show_breadcrumb"`
+	Accent           string            `json:"accent,omitempty"`
 	Path             map[string]string `json:"path"`
 }
 
@@ -102,6 +105,7 @@ func loadActionInput() ActionInput {
 		title:             os.Getenv(titleInput),
 		description:       os.Getenv(descriptionInput),
 		logo:              os.Getenv(logoInput),
+		accent:            strings.TrimSpace(os.Getenv(accentInput)),
 		path:              os.Getenv(pathInput),
 		isObsidianProject: os.Getenv(isObsidianProjectInput) == "true",
 		showFooter:        os.Getenv(showFooterInput) == "true",
@@ -119,6 +123,7 @@ func showTitle(input *ActionInput) {
 	fmt.Println("title:", input.title)
 	fmt.Println("description:", input.description)
 	fmt.Println("logo:", input.logo)
+	fmt.Println("accent:", input.accent)
 	fmt.Println("path is", input.path)
 	fmt.Println("obsidian:", input.isObsidianProject)
 	fmt.Println("show footer:", input.showFooter)
@@ -261,6 +266,7 @@ func changeConfigurationFile(input *ActionInput) error {
 	configuration.ShowFooter = input.showFooter
 	configuration.ShowBreadcrumb = input.showBreadcrumb
 	configuration.ShowStartPage = input.showStartPage
+	configuration.Accent = input.accent
 	configuration.WebSubpath = repository
 
 	data, error := json.Marshal(configuration)

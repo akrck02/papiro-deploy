@@ -17,6 +17,9 @@ inputs:
   path:
     description: "documents directory"
     default: "docs"
+  accent:
+    description: "the project's colour as hex (#2BB3A3), adjusted for light and dark"
+    default: ""
   isObsidianProject:
     description: "docs use obsidian formats"
     default: "false"
