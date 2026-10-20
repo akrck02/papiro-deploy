@@ -20,6 +20,9 @@ inputs:
   accent:
     description: "the project's colour as hex (#2BB3A3), adjusted for light and dark"
     default: ""
+  width:
+    description: "normal for a reading column, wide for pages as wide as the screen"
+    default: ""
   isObsidianProject:
     description: "docs use obsidian formats"
     default: "false"
