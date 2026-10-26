@@ -7,3 +7,4 @@ function chooseBinary() {
 const binary = chooseBinary();
 const mainScript = `${__dirname}/${binary}`;
 const action = spawnSync(mainScript, [], { stdio: "inherit" });
+process.exit(action.status ?? 1);
