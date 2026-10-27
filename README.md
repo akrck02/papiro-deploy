@@ -25,6 +25,7 @@ jobs:
           description: "description"  # your project description
           logo: "./logo.svg"          # your logo path (only svg for now)
           accent: "#2BB3A3"           # your project's colour, adjusted for light and dark
+          width: "normal"              # "wide" for pages as wide as the screen
           path: "./your-docs-path"    # the file with your markdown documents
           isObsidianProject: false    # if it is an obsidian project
           showFooter: true            # if the footer of the page must be shown

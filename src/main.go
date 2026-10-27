@@ -17,6 +17,7 @@ const (
 	descriptionInput       = "INPUT_DESCRIPTION"
 	logoInput              = "INPUT_LOGO"
 	accentInput            = "INPUT_ACCENT"
+	widthInput             = "INPUT_WIDTH"
 	pathInput              = "INPUT_PATH"
 	isObsidianProjectInput = "INPUT_ISOBSIDIANPROJECT"
 	showFooterInput        = "INPUT_SHOWFOOTER"
@@ -40,6 +41,7 @@ type ActionInput struct {
 	description       string
 	logo              string
 	accent            string
+	width             string
 	path              string
 	isObsidianProject bool
 	showFooter        bool
@@ -60,6 +62,7 @@ type PapiroConfiguration struct {
 	ShowFooter       bool              `json:"show_footer"`
 	ShowBreadcrumb   bool              `json:"show_breadcrumb"`
 	Accent           string            `json:"accent,omitempty"`
+	Width            string            `json:"width,omitempty"`
 	Path             map[string]string `json:"path"`
 }
 
@@ -106,6 +109,7 @@ func loadActionInput() ActionInput {
 		description:       os.Getenv(descriptionInput),
 		logo:              os.Getenv(logoInput),
 		accent:            strings.TrimSpace(os.Getenv(accentInput)),
+		width:             strings.TrimSpace(os.Getenv(widthInput)),
 		path:              os.Getenv(pathInput),
 		isObsidianProject: os.Getenv(isObsidianProjectInput) == "true",
 		showFooter:        os.Getenv(showFooterInput) == "true",
@@ -124,6 +128,7 @@ func showTitle(input *ActionInput) {
 	fmt.Println("description:", input.description)
 	fmt.Println("logo:", input.logo)
 	fmt.Println("accent:", input.accent)
+	fmt.Println("width:", input.width)
 	fmt.Println("path is", input.path)
 	fmt.Println("obsidian:", input.isObsidianProject)
 	fmt.Println("show footer:", input.showFooter)
@@ -267,6 +272,9 @@ func changeConfigurationFile(input *ActionInput) error {
 	configuration.ShowBreadcrumb = input.showBreadcrumb
 	configuration.ShowStartPage = input.showStartPage
 	configuration.Accent = input.accent
+	if "normal" == input.width || "wide" == input.width {
+		configuration.Width = input.width
+	}
 	configuration.WebSubpath = repository
 
 	data, error := json.Marshal(configuration)
